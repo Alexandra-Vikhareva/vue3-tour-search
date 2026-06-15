@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 import ToursSearch from './components/ToursSearch.vue';
 import CitySelect from './components/CitySelect.vue';
@@ -9,9 +9,6 @@ interface Tour {
   title: string,
   city_id: number
 }
-
-const searchQuery = ref('');
-const selectedCityId = ref(null);
 
 const tours: Tour[] = [
   { id: 1, title: 'Обзорная экскурсия по Москве на автобусе', city_id: 1 },
@@ -24,14 +21,25 @@ const tours: Tour[] = [
   { id: 8, title: 'Остров-град Свияжск', city_id: 3 },
   { id: 9, title: 'Вечерняя Казань с подсветкой', city_id: 3 }
 ]
+
+const searchQuery = ref('');
+const selectedCityId = ref(null);
+const filteredTours = computed<Tour[]>(() => {
+  const query = searchQuery.value.toLowerCase().trim()
+  return tours.filter((tour) => {
+    return (
+      (!selectedCityId.value || tour.city_id === selectedCityId.value) 
+      && (!query || tour.title.toLowerCase().includes(query)))
+  })
+})
+
 </script>
 
 <template>
-  <p>Поиск: {{ searchQuery }}</p>
-  <p>Список: {{ selectedCityId }}</p>
-  
   <ToursSearch 
     v-model="searchQuery"/>
   <CitySelect 
     v-model="selectedCityId"/>
+
+  <p>{{ filteredTours }}</p>
 </template>
