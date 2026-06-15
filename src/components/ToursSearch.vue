@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { ref } from 'vue';
+
+const searchQuery = ref('')
+
 interface Tour {
   id: number,
   title: string,
@@ -19,6 +23,11 @@ const tours: Tour[] = [
 </script>
 
 <template>
+    <h1>Сообщение: {{ searchQuery }}</h1>
+
+    <input 
+        v-model="searchQuery"
+        placeholder="Введите название экскурсии" />
 </template>
 
 <style scoped>
