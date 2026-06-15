@@ -3,6 +3,7 @@ import { ref, computed } from 'vue';
 
 import ToursSearch from './components/ToursSearch.vue';
 import CitySelect from './components/CitySelect.vue';
+import TourCard from './components/TourCard.vue';
 
 interface Tour {
   id: number,
@@ -42,4 +43,6 @@ const filteredTours = computed<Tour[]>(() => {
     v-model="selectedCityId"/>
 
   <p>{{ filteredTours }}</p>
+
+  <TourCard></TourCard>
 </template>
