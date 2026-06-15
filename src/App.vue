@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import CitySelect from './components/CitySelect.vue';
+import ToursSearch from './components/ToursSearch.vue';
 </script>
 
 <template>
-  <CitySelect></CitySelect>
+  <ToursSearch></ToursSearch>
 </template>
