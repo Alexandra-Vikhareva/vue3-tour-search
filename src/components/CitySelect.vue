@@ -1,17 +1,34 @@
 <script setup lang="ts">
+import { onMounted, ref } from 'vue';
 
-import type { City } from '../types/city';
+import type { City, CityResponse } from '../types/city';
 
 const selectedCityId = defineModel<Number | null>()
+const cities = ref<City[]>([])
+const error = ref(null)
 
-const cities: City[] = [
-    {id: 1, name: 'Москва'}, 
-    {id: 2, name: 'Санкт-Петербург'},
-    {id: 3, name: 'Казань'}]
+onMounted(() => {
+    fetch('/api/cities?api_key=873fa71c061b0c36d9ad7e47ec3635d9&username=frontend@sputnik8.com')
+    .then(response => {
+      if (response.status>=400)
+        throw new Error('server error')
+      return response.json()})
+    .then((res => {cities.value = res.map(((item:CityResponse) => {
+      const tour = {
+        id: item.id,
+        name: item.name,
+      }
+      return tour
+    }))
+    }))
+    .catch((err) => error.value = err)
+})
+
 </script>
 
 <template>
-    <div class="city-select">
+    <div v-if="error">Ошибка загрузки городов: {{ error }}</div>
+    <div v-else-if="cities" class="city-select">
         <select
             name="cities" 
             id="cities" 
