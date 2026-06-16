@@ -113,10 +113,13 @@ const filteredTours = computed<Tour[]>(() => {
 </script>
 
 <template>
-  <ToursSearch 
-    v-model="searchQuery"/>
-  <CitySelect 
-    v-model="selectedCityId"/>
+  <div class="filters">
+    <ToursSearch 
+      v-model="searchQuery"/>
+    <CitySelect 
+      v-model="selectedCityId"/>
+  </div>
+  
 
   <div class="tour-list">
     <div v-for="tour in filteredTours">
@@ -139,5 +142,13 @@ const filteredTours = computed<Tour[]>(() => {
   flex-wrap: wrap;
   gap: 50px;
   justify-content: center;
+  margin: 90px 0;
+}
+
+.filters{
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  margin: 50px 0;
 }
 </style>
