@@ -90,3 +90,11 @@ legend {
 input[type='file'] {
 	max-width: 100%;
 }
+
+:root {
+  --black-text-color: #000000;
+  --base-dark-gray: #999999;
+  --primary-text-color: #444444;
+  --primary-button-color: #FFD300;
+  --base-black: #23262F;
+}
