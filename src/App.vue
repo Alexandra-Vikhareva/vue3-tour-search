@@ -7,6 +7,7 @@ import TourCard from './components/TourCard.vue';
 
 import type { Tour } from './types/tour.ts';
 import type { Activity } from './types/activity.ts';
+import Loader from './components/Loader.vue';
 
 const tours = ref<Tour[]>([]);
 const searchQuery = ref('');
@@ -60,9 +61,7 @@ function handleClick() {
 </script>
 
 <template>
-  <div v-if="loading">Загрузка...</div>
-  <div v-else-if="error">Ошибка: {{ error }}</div>
-  <div v-else-if="data">Данные получены</div>
+  <div v-if="error">Ошибка: {{ error }}</div>
 
   <div class="filters">
     <ToursSearch 
@@ -71,8 +70,11 @@ function handleClick() {
       v-model="selectedCityId"/>
   </div>
   
+  <div v-if="loading">
+    <Loader/>
+  </div>
   <div 
-    v-if="isEmptyList"
+    v-else-if="isEmptyList"
     class="empty-list">
 
     <h1>Поиск не дал результатов</h1>
