@@ -4,6 +4,7 @@ import { ref, computed, onMounted } from 'vue';
 import ToursSearch from './components/ToursSearch.vue';
 import CitySelect from './components/CitySelect.vue';
 import TourCard from './components/TourCard.vue';
+import Logo from './components/Logo.vue';
 
 import type { Tour } from './types/tour.ts';
 import type { Activity } from './types/activity.ts';
@@ -60,6 +61,13 @@ function handleClick() {
 </script>
 
 <template>
+  <header class="header">
+    <div class="logo-wrapper">
+      <Logo class="logo" />
+    </div>
+    <h1 class="catch-phrase">Экскурсии по всему миру</h1>
+  </header>
+
   <div v-if="error">Ошибка: {{ error }}</div>
 
   <div class="filters">
@@ -101,6 +109,24 @@ function handleClick() {
 </template>
 
 <style scoped>
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.logo-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.catch-phrase {
+  font-size: 48px;
+  line-height: 68px;
+}
+
 .tour-list{
   display: flex;
   flex-direction: row;
