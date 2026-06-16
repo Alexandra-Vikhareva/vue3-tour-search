@@ -12,7 +12,6 @@ import Loader from './components/Loader.vue';
 const tours = ref<Tour[]>([]);
 const searchQuery = ref('');
 const selectedCityId = ref(null);
-const data = ref(null);
 const error = ref(null);
 const loading = ref(true);
 
