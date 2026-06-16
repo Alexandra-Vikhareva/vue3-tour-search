@@ -42,5 +42,6 @@ const searchQuery = defineModel<String>()
     top: 50%;
     transform: translateY(-50%);
     font-size: 14px;
+    color: var(--base-dark-gray);
 }
 </style>
