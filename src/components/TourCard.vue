@@ -1,21 +1,32 @@
 <script setup lang="ts">
+
+const tour = defineProps({
+    title: String,
+    id: Number,
+    city_id: Number,
+    rating: Number,
+    reviews: Number,
+    base_price: String,
+    type: String,
+    image: String
+})
 </script>
 
 <template>
     <div class="card">
-        <img src="/src/assets/Обложка.jpg" alt="/" class="photo">
+        <img :src="tour.image" alt="/" class="photo">
         <div class="info">
             <div class="rate">
-                <img src="/src/assets/star.svg" alt="/" class="star-svg">
-                <span class="rating">4,8</span>
-                <span class="reviews-quantity">(467)</span>
+                <img src="/src/assets/star.svg" alt="Обложка экскурсии" class="star-svg">
+                <span class="rating">{{ tour.rating }}</span>
+                <span class="reviews-quantity">({{ tour.reviews }})</span>
             </div>
 
-            <div class="title">Храм Василия Блаженного: аудиоэкскурсия с билетом</div>
+            <div class="title">{{ tour.title }}</div>
         </div>
 
         <div class="price">
-            <div class="start-price">от 2 500 P</div>
+            <div class="start-price">от {{ tour.base_price }}</div>
             <div class="for">за экскурсию</div>
         </div>
     </div>
