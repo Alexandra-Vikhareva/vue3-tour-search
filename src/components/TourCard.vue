@@ -35,10 +35,9 @@ const tour = defineProps({
 <style scoped>
 .card{
     width: 345px;
-    display: flex;
+    display: flex; 
     flex-direction: column;
     gap: 10px;
-    font-family: 'PT Sans Caption';
 }
 
 .photo{
