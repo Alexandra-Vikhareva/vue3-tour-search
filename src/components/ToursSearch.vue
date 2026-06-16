@@ -1,6 +1,9 @@
 <script setup lang="ts">
 const searchQuery = defineModel<String>()
 
+function handleClick() {
+    searchQuery.value = ''
+}
 </script>
 
 <template>
@@ -9,7 +12,11 @@ const searchQuery = defineModel<String>()
             v-model="searchQuery"
             placeholder="Введите название экскурсии"/>
 
-        <button class="clear-input">✕</button>
+        <button 
+            class="clear-input"
+            @click="handleClick()"
+            v-if="searchQuery"
+            type="button">✕</button>
     </div>
     
 </template>
