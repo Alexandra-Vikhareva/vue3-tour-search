@@ -1,9 +1,6 @@
 <script setup lang="ts">
 
-interface City {
-    id: number,
-    name: string,
-}
+import type { City } from '../types/city';
 
 const selectedCityId = defineModel<Number | null>()
 
