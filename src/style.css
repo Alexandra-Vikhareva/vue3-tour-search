@@ -97,4 +97,5 @@ input[type='file'] {
   --primary-text-color: #444444;
   --primary-button-color: #FFD300;
   --base-black: #23262F;
+    font-family: 'PT Sans Caption', Roboto;
 }

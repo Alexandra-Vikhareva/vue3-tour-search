@@ -101,6 +101,7 @@ const tours: Tour[] = [
 
 const searchQuery = ref('');
 const selectedCityId = ref(null);
+
 const filteredTours = computed<Tour[]>(() => {
   const query = searchQuery.value.toLowerCase().trim()
   return tours.filter((tour) => {
@@ -110,15 +111,40 @@ const filteredTours = computed<Tour[]>(() => {
   })
 })
 
+const isEmptyList = computed(() => {
+  return filteredTours.value.length === 0
+})
+
+function handleClick() {
+  searchQuery.value = '';
+  selectedCityId.value = null;
+}
+
 </script>
 
 <template>
-  <ToursSearch 
-    v-model="searchQuery"/>
-  <CitySelect 
-    v-model="selectedCityId"/>
+  <div class="filters">
+    <ToursSearch 
+      v-model="searchQuery"/>
+    <CitySelect 
+      v-model="selectedCityId"/>
+  </div>
+  
+  <div 
+    v-if="isEmptyList"
+    class="empty-list">
 
-  <div class="tour-list">
+    <h1>Поиск не дал результатов</h1>
+    <button 
+      type="button"
+      @click="handleClick()">
+      Сбросить фильтры
+    </button>
+
+  </div>
+  <div 
+    v-else
+    class="tour-list">
     <div v-for="tour in filteredTours">
       <TourCard 
         :title="tour.title"
@@ -139,5 +165,39 @@ const filteredTours = computed<Tour[]>(() => {
   flex-wrap: wrap;
   gap: 50px;
   justify-content: center;
+  margin: 90px 0;
+}
+
+.filters{
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  margin: 50px 0;
+}
+
+.empty-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  padding: 20px;
+  gap: 30px;
+  margin: 200px 0;
+}
+
+.empty-list h1 {
+  line-height: 34px;
+  font-size: 24px;
+}
+
+.empty-list button {
+  line-height: 40px;
+  font-size: 14px;
+  height: 40px;
+  width: 200px;
+  background-color: var(--primary-button-color);
+  color: white;
 }
 </style>
