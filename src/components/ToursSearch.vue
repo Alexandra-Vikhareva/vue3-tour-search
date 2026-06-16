@@ -29,7 +29,7 @@ const searchQuery = defineModel<String>()
     border-radius: 0;
     line-height: 21px;
     font-size: 16px;
-    padding: 0 15px;
+    padding: 0 35px 0 15px;
 }
 
 .tour-search input:focus {
