@@ -1,5 +1,4 @@
 // netlify/functions/api-proxy.js
-const fetch = require('node-fetch'); // Вам может понадобиться установить: npm install node-fetch
 
 exports.handler = async (event) => {
     // 1. Получаем путь от клиента (например, '/cities?api_key=...')
