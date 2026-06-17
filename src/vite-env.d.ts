@@ -11,3 +11,5 @@ declare module '*.svg?component' {
   const component: DefineComponent
   export default component
 }
+
+declare module '@trevoreyre/autocomplete-vue';
