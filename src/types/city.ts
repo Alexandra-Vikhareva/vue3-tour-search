@@ -1,11 +1,11 @@
 export interface CityResponse {
-    id : Number;
-    country_id : Number;
-    name : String;
-    region_id : Number
+  id: number;
+  country_id: number;
+  name: string;
+  region_id: number;
 }
 
 export interface City {
-    id : number;
-    name : string;
+  id: number;
+  name: string;
 }

@@ -1,111 +1,110 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
-import Fuse from 'fuse.js';
+import { ref, computed, onMounted } from "vue";
+import Fuse from "fuse.js";
 
-import ToursSearch from './components/ToursSearch.vue';
-import CitySelect from './components/CitySelect.vue';
-import TourCard from './components/TourCard.vue';
-import Logo from './components/Logo.vue';
+import ToursSearch from "./components/ToursSearch.vue";
+import CitySelect from "./components/CitySelect.vue";
+import TourCard from "./components/TourCard.vue";
+import Logo from "./components/Logo.vue";
 
-import type { Tour } from './types/tour.ts';
-import type { Activity } from './types/activity.ts';
-import Loader from './components/Loader.vue';
+import type { Tour } from "./types/tour.ts";
+import type { Activity } from "./types/activity.ts";
+import Loader from "./components/Loader.vue";
 
 const tours = ref<Tour[]>([]);
-const searchQuery = ref('');
+const searchQuery = ref("");
 const toursSearchRef = ref<InstanceType<typeof ToursSearch> | null>(null);
 const selectedCityId = ref(null);
 const error = ref(null);
 const loading = ref(true);
 
-onMounted(()=> {
-  fetch('/api/products?api_key=873fa71c061b0c36d9ad7e47ec3635d9&username=frontend@sputnik8.com')
-    .then(response => {
-      if (response.status>=400)
-        throw new Error('server error')
-      return response.json()})
-    .then(res => {tours.value = res.map(((item:Activity) => {
-      const tour = {
-        id: item.id,
-        title: item.title,
-        city_id: item.city_id,
-        rating: item.customers_review_rating,
-        reviews: item.reviews,
-        base_price: item.base_price.price,
-        image: item.main_photo.big,
-      }
-      return tour
-    }))
+onMounted(() => {
+  fetch(
+    "/api/products?api_key=873fa71c061b0c36d9ad7e47ec3635d9&username=frontend@sputnik8.com",
+  )
+    .then((response) => {
+      if (response.status >= 400) throw new Error("server error");
+      return response.json();
     })
-    .catch((err) => error.value = err)
-    .finally(() => loading.value = false)
-})
+    .then((res) => {
+      tours.value = res.map((item: Activity) => {
+        const tour = {
+          id: item.id,
+          title: item.title,
+          city_id: item.city_id,
+          rating: item.customers_review_rating,
+          reviews: item.reviews,
+          base_price: item.base_price.price,
+          image: item.main_photo.big,
+        };
+        return tour;
+      });
+    })
+    .catch((err) => (error.value = err))
+    .finally(() => (loading.value = false));
+});
 
 const fuse = computed(() => {
-  return new Fuse(
-    tours.value,
-    {
-      keys: ['title'],
-      threshold: 0.4,
-      ignoreLocation: true,
-    }
-  )
-})
+  return new Fuse(tours.value, {
+    keys: ["title"],
+    threshold: 0.4,
+    ignoreLocation: true,
+  });
+});
 
 const filteredTours = computed<Tour[]>(() => {
-  const query = searchQuery.value.toLowerCase().trim()
-  
+  const query = searchQuery.value.toLowerCase().trim();
+
   if (!query) {
-    if (selectedCityId.value != null) 
-      return tours.value.filter(tour => tour.city_id === selectedCityId.value)
-    return tours.value
+    if (selectedCityId.value != null)
+      return tours.value.filter(
+        (tour) => tour.city_id === selectedCityId.value,
+      );
+    return tours.value;
   }
 
-  const foundTours = fuse.value.search(query).map(tour => tour.item)
+  const foundTours = fuse.value.search(query).map((tour) => tour.item);
 
-  if (selectedCityId.value != null) 
-    return foundTours.filter(tour => tour.city_id === selectedCityId.value)
+  if (selectedCityId.value != null)
+    return foundTours.filter((tour) => tour.city_id === selectedCityId.value);
 
-  return foundTours
-})
+  return foundTours;
+});
 
 const isEmptyList = computed(() => {
-  return filteredTours.value.length === 0
-})
+  return filteredTours.value.length === 0;
+});
 
 function handleClick() {
-  searchQuery.value = '';
+  searchQuery.value = "";
   selectedCityId.value = null;
   toursSearchRef.value?.clear();
 }
 
 const usedCities = computed(() => {
-  const usedCitiesIds = new Set(tours.value.map(tour => tour.city_id))
-  return usedCitiesIds
-})
+  const usedCitiesIds = new Set(tours.value.map((tour) => tour.city_id));
+  return usedCitiesIds;
+});
 
-// Туры, отфильтрованные только по городу (без поиска)
 const cityFilteredTours = computed(() => {
   if (selectedCityId.value != null) {
-    return tours.value.filter(tour => tour.city_id === selectedCityId.value);
+    return tours.value.filter((tour) => tour.city_id === selectedCityId.value);
   }
   return tours.value;
 });
 
-
 const tourWords = computed(() => {
   const wordsSet = new Set<string>();
-  cityFilteredTours.value.forEach(tour => {
+  cityFilteredTours.value.forEach((tour) => {
     const words = tour.title
       .toLowerCase()
-      .replace(/[^a-zа-яё\s]/g, '')
+      .replace(/[^a-zа-яё\s]/g, "")
       .split(/\s+/)
-      .filter(word => word.length > 2);
-    words.forEach(word => wordsSet.add(word));
+      .filter((word) => word.length > 2);
+    words.forEach((word) => wordsSet.add(word));
   });
   return Array.from(wordsSet);
 });
-
 </script>
 
 <template>
@@ -119,45 +118,28 @@ const tourWords = computed(() => {
   <div v-if="error">Ошибка: {{ error }}</div>
 
   <div class="filters">
-    <ToursSearch 
+    <ToursSearch
       ref="toursSearchRef"
       :items="tourWords"
-      v-model="searchQuery"/>
-    <CitySelect 
-      v-model="selectedCityId"
-      :cities="usedCities"/>
+      v-model="searchQuery"
+    />
+    <CitySelect v-model="selectedCityId" :cities="usedCities" />
   </div>
-  
+
   <div v-if="loading">
-    <Loader/>
+    <Loader />
   </div>
-  <div 
-    v-else-if="isEmptyList"
-    class="empty-list">
-
+  <div v-else-if="isEmptyList" class="empty-list">
     <h1>Поиск не дал результатов</h1>
-    <button 
-      type="button"
-      @click="handleClick()">
-      Сбросить фильтры
-    </button>
-
+    <button type="button" @click="handleClick()">Сбросить фильтры</button>
   </div>
   <div v-else class="tour-list-wrapper">
     <div class="tour-list">
-        <div v-for="tour in filteredTours">
-          <TourCard 
-            :title="tour.title"
-            :id="tour.id"
-            :city_id="tour.city_id"
-            :rating="tour.rating"
-            :reviews="tour.reviews"
-            :base_price="tour.base_price"
-            :image="tour.image"/>
-        </div>
+      <div v-for="tour in filteredTours">
+        <TourCard :tour="tour" />
       </div>
+    </div>
   </div>
-  
 </template>
 
 <style scoped>
@@ -187,7 +169,7 @@ const tourWords = computed(() => {
   box-sizing: border-box;
 }
 
-.tour-list{
+.tour-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, 345px);
   gap: 50px;
@@ -210,7 +192,7 @@ const tourWords = computed(() => {
   }
 }
 
-.filters{
+.filters {
   display: flex;
   gap: 30px;
   justify-content: center;

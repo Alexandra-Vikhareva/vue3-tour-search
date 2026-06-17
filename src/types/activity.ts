@@ -1,17 +1,17 @@
-type CurrencyCode = 'RUB' | 'UAH' | 'USD' | 'EUR' | 'GBP' | 'KZT' | 'BYN';
+type CurrencyCode = "RUB" | "UAH" | "USD" | "EUR" | "GBP" | "KZT" | "BYN";
 
 type CurrencyPrices = Record<CurrencyCode, number>;
 
-type ActivityType = 'tour' | 'entry_ticket' | 'transfer' | 'composite_activity';
+type ActivityType = "tour" | "entry_ticket" | "transfer" | "composite_activity";
 
-type PayType = 'post_pay' | 'deposit' | 'full_pay';
+type PayType = "post_pay" | "deposit" | "full_pay";
 
-type ProductType = 'shared' | 'private';
+type ProductType = "shared" | "private";
 
 type TicketType =
-  | 'group_tour, ticket_per_person'
-  | 'private_tour, ticket_per_group'
-  | 'private_tour, ticket_per_person';
+  | "group_tour, ticket_per_person"
+  | "private_tour, ticket_per_group"
+  | "private_tour, ticket_per_person";
 
 interface Duration {
   value: number;
@@ -20,7 +20,7 @@ interface Duration {
 }
 
 interface Schedule {
-  id: null;
+  id: number | null;
   name: string;
 }
 
@@ -40,7 +40,7 @@ interface OrderLine {
   all_amounts_to_pay: CurrencyPrices;
   price_per: string;
   title: string;
-  offer_type: 'base';
+  offer_type: "base";
   countable: boolean;
   start_date: number;
   from_quantity: number;
@@ -67,7 +67,7 @@ interface Category {
 }
 
 interface Photo {
-  id: null;
+  id: number | null;
   original: string;
   small: string;
   big: string;
@@ -85,8 +85,8 @@ interface Review {
 
 interface BeginPlace {
   address: string;
-  address_existing: false;
-  address_comment: '';
+  address_existing: boolean;
+  address_comment: string;
 }
 
 interface BasePrice {
