@@ -6,6 +6,6 @@ export interface CityResponse {
 }
 
 export interface City {
-    id : Number;
-    name : String;
+    id : number;
+    name : string;
 }
