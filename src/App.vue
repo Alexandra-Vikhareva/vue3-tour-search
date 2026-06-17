@@ -129,12 +129,13 @@ function handleClick() {
 }
 
 .tour-list{
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 345px);
   gap: 50px;
-  justify-content: center;
   margin: 90px 0;
+  max-width: 1135px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .filters{
