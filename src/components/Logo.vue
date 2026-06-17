@@ -1,5 +1,5 @@
-<script setup>
-import LogoIcon from '../assets/sputnik.svg?component'
+<script setup lang="ts">
+import LogoIcon from "../assets/sputnik.svg?component";
 </script>
 
 <template>

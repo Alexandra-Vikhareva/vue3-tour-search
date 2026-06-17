@@ -1,37 +1,44 @@
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue';
-import type { City, CityResponse } from '../types/city';
+import { onMounted, ref, computed } from "vue";
+import type { City, CityResponse } from "../types/city";
 
-const selectedCityId = defineModel<Number | null>()
-const usedCitiesId = defineProps<{cities: Set<Number>}>()
-const cities = ref<City[]>([])
-const error = ref(null)
+const selectedCityId = defineModel<number | null>();
+const usedCitiesId = defineProps<{ cities: Set<Number> }>();
+const cities = ref<City[]>([]);
+const error = ref(null);
 const isOpen = ref(false);
 
 onMounted(() => {
-    fetch('/api/cities?api_key=873fa71c061b0c36d9ad7e47ec3635d9&username=frontend@sputnik8.com')
-    .then(response => {
-      if (response.status>=400)
-        throw new Error('server error')
-      return response.json()})
-    .then((res => {cities.value = res.map(((item:CityResponse) => {
-      const tour = {
-        id: item.id,
-        name: item.name,
-      }
-      return tour
-    }))
-    }))
-    .then(() => {cities.value = cities.value.filter(city => usedCitiesId.cities.has(city.id) )})
-    .catch((err) => error.value = err);
+  fetch(
+    "/api/cities?api_key=873fa71c061b0c36d9ad7e47ec3635d9&username=frontend@sputnik8.com",
+  )
+    .then((response) => {
+      if (response.status >= 400) throw new Error("server error");
+      return response.json();
+    })
+    .then((res) => {
+      cities.value = res.map((item: CityResponse) => {
+        const city = {
+          id: item.id,
+          name: item.name,
+        };
+        return city;
+      });
+    })
+    .then(() => {
+      cities.value = cities.value.filter((city) =>
+        usedCitiesId.cities.has(city.id),
+      );
+    })
+    .catch((err) => (error.value = err));
 
-    document.addEventListener('click', closeOnOutsideClick);
+  document.addEventListener("click", closeOnOutsideClick);
 });
 
 const selectedLabel = computed(() => {
-  if (selectedCityId.value === null) return 'Все города';
-  const found = cities.value.find(city => city.id === selectedCityId.value);
-  return found ? found.name : 'Выберите город';
+  if (selectedCityId.value === null) return "Все города";
+  const found = cities.value.find((city) => city.id === selectedCityId.value);
+  return found ? found.name : "Выберите город";
 });
 
 const toggleDropdown = () => {
@@ -45,68 +52,55 @@ const selectOption = (id: number | null) => {
 
 const closeOnOutsideClick = (event: Event) => {
   const target = event.target as HTMLElement;
-  if (!target.closest('.custom-select')) {
+  if (!target.closest(".custom-select")) {
     isOpen.value = false;
   }
 };
 </script>
 
 <template>
-    <div 
-        v-if="error">
-            Ошибка загрузки городов: {{ error }}
+  <div v-if="error">Ошибка загрузки городов: {{ error }}</div>
+
+  <div v-else class="custom-select">
+    <div class="select-trigger" @click="toggleDropdown">
+      <span class="selected-text">
+        {{ selectedLabel }}
+      </span>
+      <span class="arrow" :class="{ open: isOpen }"> ⏷ </span>
     </div>
 
-    <div 
-        v-else-if="cities" 
-        class="custom-select">
-            <div 
-                class="select-trigger" 
-                @click="toggleDropdown">
-
-                <span 
-                    class="selected-text">
-                        {{ selectedLabel }}
-                </span>
-                <span 
-                    class="arrow" 
-                    :class="{ open: isOpen }">
-                        ⏷
-                </span>
-            </div>
-
-            <transition>
-                <ul 
-                    v-if="isOpen" 
-                    class="dropdown-list">
-                        <li
-                            class="dropdown-item"
-                            :class="{ active: selectedCityId === null }"
-                            @click="selectOption(null)">
-                                Все города
-                        </li>
-                        <li
-                            v-for="city in cities"
-                            :key="city.id"
-                            class="dropdown-item"
-                            :class="{ active: selectedCityId === city.id }"
-                            @click="selectOption(city.id)">
-                                {{ city.name }}
-                        </li>
-                </ul>
-            </transition>
+    <transition>
+      <ul v-if="isOpen" class="dropdown-list">
+        <li
+          class="dropdown-item"
+          :class="{ active: selectedCityId === null }"
+          @click="selectOption(null)"
+        >
+          Все города
+        </li>
+        <li
+          v-for="city in cities"
+          :key="city.id"
+          class="dropdown-item"
+          :class="{ active: selectedCityId === city.id }"
+          @click="selectOption(city.id)"
+        >
+          {{ city.name }}
+        </li>
+      </ul>
+    </transition>
   </div>
 </template>
 
 <style scoped>
-.custom-select{
-    position: relative;
-    width: 300px;
-    height: 50px;
-    display: inline-block;
-    font-family: inherit;
-    font-size: 16px;
-    user-select: none;
+.custom-select {
+  position: relative;
+  width: 300px;
+  height: 50px;
+  display: inline-block;
+  font-family: inherit;
+  font-size: 16px;
+  user-select: none;
 }
 
 .select-trigger {
