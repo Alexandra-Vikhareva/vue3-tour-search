@@ -17,10 +17,11 @@ const toursSearchRef = ref<InstanceType<typeof ToursSearch> | null>(null);
 const selectedCityId = ref(null);
 const error = ref(null);
 const loading = ref(true);
+const apiBase = import.meta.env.VITE_API_BASE_URL
 
 onMounted(() => {
   fetch(
-    "/api/products?api_key=873fa71c061b0c36d9ad7e47ec3635d9&username=frontend@sputnik8.com",
+    `${apiBase}/products?api_key=873fa71c061b0c36d9ad7e47ec3635d9&username=frontend@sputnik8.com`,
   )
     .then((response) => {
       if (response.status >= 400) throw new Error("server error");

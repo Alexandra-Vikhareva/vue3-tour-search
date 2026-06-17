@@ -7,10 +7,11 @@ const usedCitiesId = defineProps<{ cities: Set<Number> }>();
 const cities = ref<City[]>([]);
 const error = ref(null);
 const isOpen = ref(false);
+const apiBase = import.meta.env.VITE_API_BASE_URL
 
 onMounted(() => {
   fetch(
-    "/api/cities?api_key=873fa71c061b0c36d9ad7e47ec3635d9&username=frontend@sputnik8.com",
+    `${apiBase}/cities?api_key=873fa71c061b0c36d9ad7e47ec3635d9&username=frontend@sputnik8.com`,
   )
     .then((response) => {
       if (response.status >= 400) throw new Error("server error");

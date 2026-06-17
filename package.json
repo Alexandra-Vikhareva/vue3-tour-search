@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
     "@trevoreyre/autocomplete-vue": "^3.0.3",
@@ -17,6 +18,7 @@
     "@types/node": "^24.12.3",
     "@vitejs/plugin-vue": "^6.0.6",
     "@vue/tsconfig": "^0.9.1",
+    "gh-pages": "^6.3.0",
     "typescript": "~6.0.2",
     "vite": "^8.0.12",
     "vite-svg-loader": "^5.1.1",
