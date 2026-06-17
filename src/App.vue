@@ -4,6 +4,7 @@ import { ref, computed, onMounted } from 'vue';
 import ToursSearch from './components/ToursSearch.vue';
 import CitySelect from './components/CitySelect.vue';
 import TourCard from './components/TourCard.vue';
+import Logo from './components/Logo.vue';
 
 import type { Tour } from './types/tour.ts';
 import type { Activity } from './types/activity.ts';
@@ -60,6 +61,13 @@ function handleClick() {
 </script>
 
 <template>
+  <header class="header">
+    <div class="logo-wrapper">
+      <Logo class="logo" />
+    </div>
+    <h1 class="catch-phrase">Экскурсии по всему миру</h1>
+  </header>
+
   <div v-if="error">Ошибка: {{ error }}</div>
 
   <div class="filters">
@@ -84,30 +92,71 @@ function handleClick() {
     </button>
 
   </div>
-  <div 
-    v-else
-    class="tour-list">
-    <div v-for="tour in filteredTours">
-      <TourCard 
-        :title="tour.title"
-        :id="tour.id"
-        :city_id="tour.city_id"
-        :rating="tour.rating"
-        :reviews="tour.reviews"
-        :base_price="tour.base_price"
-        :image="tour.image"/>
-    </div>
+  <div v-else class="tour-list-wrapper">
+    <div class="tour-list">
+        <div v-for="tour in filteredTours">
+          <TourCard 
+            :title="tour.title"
+            :id="tour.id"
+            :city_id="tour.city_id"
+            :rating="tour.rating"
+            :reviews="tour.reviews"
+            :base_price="tour.base_price"
+            :image="tour.image"/>
+        </div>
+      </div>
   </div>
+  
 </template>
 
 <style scoped>
-.tour-list{
+.header {
+  width: 100%;
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 50px;
   justify-content: center;
-  margin: 90px 0;
+  align-items: center;
+  flex-direction: column;
+}
+
+.logo-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.catch-phrase {
+  font-size: 48px;
+  line-height: 68px;
+  font-weight: 700;
+  padding: 0 15px;
+  text-align: center;
+}
+
+.tour-list-wrapper {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.tour-list{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 345px);
+  gap: 50px;
+  max-width: 1135px;
+  margin: 90px auto;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1135px) {
+  .tour-list {
+    grid-template-columns: repeat(2, 345px);
+    max-width: 740px;
+  }
+}
+
+@media (max-width: 740px) {
+  .tour-list {
+    grid-template-columns: 345px;
+    max-width: 345px;
+  }
 }
 
 .filters{
@@ -115,6 +164,13 @@ function handleClick() {
   gap: 30px;
   justify-content: center;
   margin: 50px 0;
+}
+
+@media (max-width: 740px) {
+  .filters {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 .empty-list {
@@ -126,7 +182,13 @@ function handleClick() {
   width: 100%;
   padding: 20px;
   gap: 30px;
-  margin: 200px 0;
+  margin: 180px 0 0 0;
+}
+
+@media (max-width: 740px) {
+  .empty-list {
+    margin: 50px 0 0 0;
+  }
 }
 
 .empty-list h1 {

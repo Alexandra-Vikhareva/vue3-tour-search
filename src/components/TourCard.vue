@@ -17,7 +17,7 @@ const tour = defineProps({
         <img :src="tour.image" alt="/" class="photo">
         <div class="info">
             <div class="rate">
-                <img src="/src/assets/star.svg" alt="Обложка экскурсии" class="star-svg">
+                <img src="/star.svg" class="star-svg">
                 <span class="rating">{{ tour.rating }}</span>
                 <span class="reviews-quantity">({{ tour.reviews }})</span>
             </div>
@@ -44,6 +44,7 @@ const tour = defineProps({
     width: 345px;
     height: 200px;
     border-radius: 5px;
+    object-fit: cover;
 }
 
 .rate{
