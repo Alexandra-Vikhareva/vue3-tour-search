@@ -127,6 +127,8 @@ function handleClick() {
   font-size: 48px;
   line-height: 68px;
   font-weight: 700;
+  padding: 0 15px;
+  text-align: center;
 }
 
 .tour-list-wrapper {
@@ -162,6 +164,13 @@ function handleClick() {
   gap: 30px;
   justify-content: center;
   margin: 50px 0;
+}
+
+@media (max-width: 740px) {
+  .filters {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 .empty-list {
