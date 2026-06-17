@@ -44,6 +44,7 @@ const tour = defineProps({
     width: 345px;
     height: 200px;
     border-radius: 5px;
+    object-fit: cover;
 }
 
 .rate{
