@@ -185,6 +185,12 @@ function handleClick() {
   margin: 180px 0 0 0;
 }
 
+@media (max-width: 740px) {
+  .empty-list {
+    margin: 50px 0 0 0;
+  }
+}
+
 .empty-list h1 {
   line-height: 34px;
   font-size: 24px;
