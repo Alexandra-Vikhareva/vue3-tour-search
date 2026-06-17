@@ -13,6 +13,7 @@ import Loader from './components/Loader.vue';
 
 const tours = ref<Tour[]>([]);
 const searchQuery = ref('');
+const toursSearchRef = ref<InstanceType<typeof ToursSearch> | null>(null);
 const selectedCityId = ref(null);
 const error = ref(null);
 const loading = ref(true);
@@ -75,12 +76,35 @@ const isEmptyList = computed(() => {
 function handleClick() {
   searchQuery.value = '';
   selectedCityId.value = null;
+  toursSearchRef.value?.clear();
 }
 
 const usedCities = computed(() => {
   const usedCitiesIds = new Set(tours.value.map(tour => tour.city_id))
   return usedCitiesIds
 })
+
+// Туры, отфильтрованные только по городу (без поиска)
+const cityFilteredTours = computed(() => {
+  if (selectedCityId.value != null) {
+    return tours.value.filter(tour => tour.city_id === selectedCityId.value);
+  }
+  return tours.value;
+});
+
+
+const tourWords = computed(() => {
+  const wordsSet = new Set<string>();
+  cityFilteredTours.value.forEach(tour => {
+    const words = tour.title
+      .toLowerCase()
+      .replace(/[^a-zа-яё\s]/g, '')
+      .split(/\s+/)
+      .filter(word => word.length > 2);
+    words.forEach(word => wordsSet.add(word));
+  });
+  return Array.from(wordsSet);
+});
 
 </script>
 
@@ -96,6 +120,8 @@ const usedCities = computed(() => {
 
   <div class="filters">
     <ToursSearch 
+      ref="toursSearchRef"
+      :items="tourWords"
       v-model="searchQuery"/>
     <CitySelect 
       v-model="selectedCityId"
