@@ -10,6 +10,6 @@ import LogoIcon from '../assets/sputnik.svg?component'
 .logo {
   width: 150px;
   height: 24px;
-  margin: 50px;
+  margin: 50px 50px 30px 50px;
 }
 </style>

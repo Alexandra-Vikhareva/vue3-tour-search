@@ -125,6 +125,7 @@ function handleClick() {
 .catch-phrase {
   font-size: 48px;
   line-height: 68px;
+  font-weight: 700;
 }
 
 .tour-list{
@@ -152,7 +153,7 @@ function handleClick() {
   width: 100%;
   padding: 20px;
   gap: 30px;
-  margin: 200px 0;
+  margin: 180px 0 0 0;
 }
 
 .empty-list h1 {
