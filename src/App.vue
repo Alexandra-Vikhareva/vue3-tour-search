@@ -77,6 +77,11 @@ function handleClick() {
   selectedCityId.value = null;
 }
 
+const usedCities = computed(() => {
+  const usedCitiesIds = new Set(tours.value.map(tour => tour.city_id))
+  return usedCitiesIds
+})
+
 </script>
 
 <template>
@@ -93,7 +98,8 @@ function handleClick() {
     <ToursSearch 
       v-model="searchQuery"/>
     <CitySelect 
-      v-model="selectedCityId"/>
+      v-model="selectedCityId"
+      :cities="usedCities"/>
   </div>
   
   <div v-if="loading">

@@ -4,6 +4,7 @@ import { onMounted, ref } from 'vue';
 import type { City, CityResponse } from '../types/city';
 
 const selectedCityId = defineModel<Number | null>()
+const usedCitiesId = defineProps<{cities: Set<Number>}>()
 const cities = ref<City[]>([])
 const error = ref(null)
 
@@ -21,6 +22,7 @@ onMounted(() => {
       return tour
     }))
     }))
+    .then(() => {cities.value = cities.value.filter(city => usedCitiesId.cities.has(city.id) )})
     .catch((err) => error.value = err)
 })
 
