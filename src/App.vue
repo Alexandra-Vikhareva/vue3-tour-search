@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
+import Fuse from 'fuse.js';
 
 import ToursSearch from './components/ToursSearch.vue';
 import CitySelect from './components/CitySelect.vue';
@@ -39,14 +40,32 @@ onMounted(()=> {
     .finally(() => loading.value = false)
 })
 
+const fuse = computed(() => {
+  return new Fuse(
+    tours.value,
+    {
+      keys: ['title'],
+      threshold: 0.4,
+      ignoreLocation: true,
+    }
+  )
+})
 
 const filteredTours = computed<Tour[]>(() => {
   const query = searchQuery.value.toLowerCase().trim()
-  return tours.value.filter((tour) => {
-    return (
-      (!selectedCityId.value || tour.city_id === selectedCityId.value) 
-      && (!query || tour.title.toLowerCase().includes(query)))
-  })
+  
+  if (!query) {
+    if (selectedCityId.value != null) 
+      return tours.value.filter(tour => tour.city_id === selectedCityId.value)
+    return tours.value
+  }
+
+  const foundTours = fuse.value.search(query).map(tour => tour.item)
+
+  if (selectedCityId.value != null) 
+    return foundTours.filter(tour => tour.city_id === selectedCityId.value)
+
+  return foundTours
 })
 
 const isEmptyList = computed(() => {
