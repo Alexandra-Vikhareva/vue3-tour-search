@@ -1,30 +1,32 @@
-// netlify/functions/api-proxy.js
-
 exports.handler = async (event) => {
-    // 1. Получаем путь от клиента (например, '/cities?api_key=...')
-    const path = event.path.replace('/.netlify/functions/api-proxy', '');
+    // Путь без /api
+    const path = event.path.replace(/^\/api/, '');
+    // Параметры запроса
+    const query = event.queryStringParameters
+        ? '?' + new URLSearchParams(event.queryStringParameters).toString()
+        : '';
+    const targetUrl = `https://api.sputnik8.com/v1${path}${query}`;
 
-    // 2. Формируем целевой URL для API
-    const targetUrl = `https://api.sputnik8.com/v1${path}`;
+    console.log('🔍 targetUrl:', targetUrl); // <-- лог URL
 
     try {
-        // 3. Делаем запрос к реальному API
         const response = await fetch(targetUrl);
         const data = await response.json();
+        console.log('📦 data from API:', JSON.stringify(data)); // <-- лог ответа
 
-        // 4. Возвращаем ответ клиенту с правильными CORS-заголовками
         return {
             statusCode: 200,
             headers: {
-                'Access-Control-Allow-Origin': '*', // Разрешаем доступ с любого источника
-                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),
         };
     } catch (error) {
+        console.error('❌ Error:', error);
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: 'Failed to fetch data' }),
+            body: JSON.stringify({ error: 'Failed to fetch data from API' }),
         };
     }
 };
