@@ -4,7 +4,10 @@ import type { City, CityResponse } from "../types/city";
 
 const selectedCityId = defineModel<number | null>();
 const usedCitiesId = defineProps<{ cities: Set<Number> }>();
-const cities = ref<City[]>([]);
+const allCities = ref<City[]>([]);
+const cities = computed(() =>
+  allCities.value.filter((city) => usedCitiesId.cities.has(city.id))
+);
 const error = ref(null);
 const isOpen = ref(false);
 const apiBase = import.meta.env.VITE_API_BASE_URL
@@ -18,18 +21,10 @@ onMounted(() => {
       return response.json();
     })
     .then((res) => {
-      cities.value = res.map((item: CityResponse) => {
-        const city = {
-          id: item.id,
-          name: item.name,
-        };
-        return city;
-      });
-    })
-    .then(() => {
-      cities.value = cities.value.filter((city) =>
-        usedCitiesId.cities.has(city.id),
-      );
+      allCities.value = res.map((item: CityResponse) => ({
+        id: item.id,
+        name: item.name,
+      }));
     })
     .catch((err) => (error.value = err));
 
