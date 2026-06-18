@@ -7,12 +7,9 @@ exports.handler = async (event) => {
         : '';
     const targetUrl = `https://api.sputnik8.com/v1${path}${query}`;
 
-    console.log('🔍 targetUrl:', targetUrl); // <-- лог URL
-
     try {
         const response = await fetch(targetUrl);
         const data = await response.json();
-        console.log('📦 data from API:', JSON.stringify(data)); // <-- лог ответа
 
         return {
             statusCode: 200,
